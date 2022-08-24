@@ -214,17 +214,6 @@ fun returnNonZero(value: Double?): Int {
     else (value?.roundToInt() ?: 1)
 }
 
-fun giftCardHistoryStatus(status: Int): String {
-    if (status == 1) {
-        return "Accepted"
-    }
-    if (status == 2) {
-        return "Pending"
-    }
-    return "Declined"
-}
-
-
 fun timestampToLocalDateTime(time: Long): String {
     val cal = Calendar.getInstance(Locale.getDefault())
     cal.timeInMillis = time
