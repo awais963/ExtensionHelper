@@ -96,37 +96,6 @@ fun NavController.navigateSafe(
     }
 }
 
-fun MaterialTextView.status(value: Int) {
-
-    when (value) {
-        1 -> {
-            setTextColor(Color.parseColor("#2FCF00"))
-            text = giftCardHistoryStatus(value)
-        }
-
-        2 -> {
-            text = giftCardHistoryStatus(value)
-            setTextColor(Color.parseColor("#FF5A01"))
-
-        }
-
-        3 -> {
-            text = giftCardHistoryStatus(value)
-            setTextColor(Color.parseColor("#FF0101"))
-
-        }
-    }
-}
-
-
-fun MaterialTextView.entryFee(fee: Long) {
-    if (fee == 0.toLong()) {
-        text = "free"
-    } else {
-        convertCoinsCount(fee)
-    }
-}
-
 fun RecyclerView.verticalDecoration(
     context: Context,
     drawable: Int? = R.drawable.recycler_divider
@@ -186,14 +155,4 @@ fun toastMessage(context: Context?, message: String?) {
         val toast = makeText(context, message, Toast.LENGTH_SHORT)
         toast.show()
     }
-}
-
-
-fun RadioButton.setStartDrawable(drawable: Int) {
-    setCompoundDrawablesWithIntrinsicBounds(
-        AppCompatResources.getDrawable(
-            this.context,
-            drawable
-        ), null, null, null
-    )
 }
