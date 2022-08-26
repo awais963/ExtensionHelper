@@ -208,7 +208,7 @@ fun ContentResolver.getFileName(uri: Uri): String {
 
 fun timerTimeStamp(endTime: Long, currentTime: Long) = (endTime.minus(currentTime)) * 1000
 
-
+gi
 fun returnNonZero(value: Double?): Int {
     return if (value?.roundToInt() == 0) 1
     else (value?.roundToInt() ?: 1)
