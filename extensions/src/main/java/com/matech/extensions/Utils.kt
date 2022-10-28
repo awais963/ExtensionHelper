@@ -8,6 +8,7 @@ import android.graphics.Shader
 import android.net.Uri
 import android.os.Build
 import android.provider.OpenableColumns
+import android.text.TextUtils
 import android.text.format.DateFormat
 import android.util.Log
 import android.util.Patterns
@@ -58,7 +59,7 @@ fun formatMonth(timeInMilli: Long): String {
     return outputDateFormat.format(timeInMilli)
 }
 
-fun isDobValid(timeInMilli: Long): Boolean {
+fun isValidDOB(timeInMilli: Long): Boolean {
 
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
     val date = Date(timeInMilli)
@@ -113,88 +114,6 @@ fun responseErrorMessage(errorBody: ResponseBody?): String {
 }
 
 
-/*fun convertRankCoins(coins: Int): String {
-    return when (coins) {
-        in 1000..999999 -> {
-            val temp = coins / 1000
-            val tempResult = temp.toString()
-            val result: String = tempResult + "K"
-            result
-        }
-        in 1000000..99999999 -> {
-            val temp = coins / 1000000
-            val tempResult = temp.toString()
-            return tempResult + "M"
-        }
-        in 1000000000..100000000000 -> {
-            val temp = coins / 10000000
-            val tempResult = temp.toString()
-            return tempResult + "B"
-        }
-        else -> coins.toString()
-    }
-}*/
-
-
-fun stringArrayToIntArray(value: List<String>): List<Int> {
-    val coins = ArrayList<Int>()
-
-    for (element in value) {
-        //coins[i] = Integer.parseInt(result.coin[i])
-        coins.add(element.toInt())
-    }
-    return coins
-}
-
-const val ISO_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-const val MONTH_YEAR_FORMAT = "MMMM yyyy"
-val locale: Locale = Locale.ENGLISH
-fun profileDateFormat(input: String): String {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val inputFormatter =
-            DateTimeFormatter.ofPattern(ISO_DATE_FORMAT, locale)
-        val outputFormatter = DateTimeFormatter.ofPattern(MONTH_YEAR_FORMAT, locale)
-        val date = LocalDate.parse(input, inputFormatter)
-        val formattedDate = outputFormatter.format(date)
-        formattedDate.toString()
-
-    } else {
-        val parser = SimpleDateFormat(ISO_DATE_FORMAT, locale)
-        val formatter = SimpleDateFormat(MONTH_YEAR_FORMAT, locale)
-        val formattedDate = formatter.format(parser.parse(input)!!)
-        formattedDate.toString()
-    }
-}
-
-fun chatDateFormat(input: String): String {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        try {
-            val inputFormatter =
-                Instant.parse(input)
-            val time = chatDateFormat(inputFormatter.toEpochMilli())
-            time
-
-        } catch (e: Exception) {
-            input
-        }
-
-    } else {
-        val parser = SimpleDateFormat(ISO_DATE_FORMAT, locale)
-        val formatter = SimpleDateFormat("HH:mm", locale)
-        val formattedDate = formatter.format(parser.parse(input)!!)
-        formattedDate.toString()
-    }
-}
-
-fun chatDateFormat(input: Long): String {
-
-    val cal = Calendar.getInstance(Locale.getDefault())
-    cal.timeInMillis = input
-
-    return DateFormat.format("hh:mm a", cal).toString()
-
-}
-
 @SuppressLint("Range")
 fun ContentResolver.getFileName(uri: Uri): String {
     var name = ""
@@ -206,38 +125,11 @@ fun ContentResolver.getFileName(uri: Uri): String {
     return name
 }
 
-fun timerTimeStamp(endTime: Long, currentTime: Long) = (endTime.minus(currentTime)) * 1000
 
-gi
 fun returnNonZero(value: Double?): Int {
     return if (value?.roundToInt() == 0) 1
     else (value?.roundToInt() ?: 1)
 }
-
-fun timestampToLocalDateTime(time: Long): String {
-    val cal = Calendar.getInstance(Locale.getDefault())
-    cal.timeInMillis = time
-
-    return DateFormat.format("hh:mm a dd MMM", cal).toString()
-
-}
-
-fun timestampToDate(time: Long): String {
-    val cal = Calendar.getInstance(Locale.getDefault())
-    cal.timeInMillis = time
-
-    return DateFormat.format("dd MMM", cal).toString()
-
-}
-
-fun timestampToTime(time: Long): String {
-    val cal = Calendar.getInstance(Locale.getDefault())
-    cal.timeInMillis = time
-
-    return DateFormat.format("hh:mm a", cal).toString()
-
-}
-
 
 fun checkRooted(): Boolean {
     return checkRootMethod1() || checkRootMethod2() || checkRootMethod3()
@@ -274,32 +166,32 @@ private fun checkRootMethod3(): Boolean {
 }
 
 
-fun prettyCount(coins: Long): String {
-    return when (coins) {
+fun prettyCount(value: Long): String {
+    return when (value) {
         in 1000..999999 -> {
-            val temp = coins / 1000
+            val temp = value / 1000
             val tempResult = temp.toString()
             val result: String = tempResult + "K"
             result
         }
         in 1000000..99999999 -> {
-            val temp = coins / 1000000
+            val temp = value / 1000000
             val tempResult = temp.toString()
             return tempResult + "M"
         }
         in 1000000000..100000000000 -> {
-            val temp = coins / 1000000000
+            val temp = value / 1000000000
             val tempResult = temp.toString()
             return tempResult + "B"
         }
-        else -> coins.toString()
+        else -> value.toString()
     }
 }
 
-fun convertCoinsCount(coins: Long): String {
-    return when (coins) {
+fun convertCoinsCount(value: Long): String {
+    return when (value) {
         in 1000..999999 -> {
-            val temp = coins / 1000.0
+            val temp = value / 1000.0
             val tempResult = if (temp % 1.0 == 0.0) {
                 String.format("%.0f", temp)
             } else {
@@ -310,15 +202,24 @@ fun convertCoinsCount(coins: Long): String {
             result
         }
         in 1000000..99999999 -> {
-            val temp = coins / 1000000.0
+            val temp = value / 1000000.0
             val tempResult = String.format("%.1f", temp)
             return tempResult + "M"
         }
         in 1000000000..100000000000 -> {
-            val temp = coins / 1000000000
+            val temp = value / 1000000000
             return "$temp B"
 
         }
-        else -> coins.toString()
+        else -> value.toString()
     }
 }
+
+fun isPhoneNumberInput(input :String):Boolean{
+    return if(!TextUtils.isEmpty(input)){
+        TextUtils.isDigitsOnly(input)
+    }else{
+        false
+    }
+}
+
